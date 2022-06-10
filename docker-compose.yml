@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: arm64v8/mysql:8.0.29-oracle
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+
+  postgres:
+    image: arm64v8/postgres:14.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: arm64v8/adminer
+    restart: always
+    ports:
+      - 8080:8080
