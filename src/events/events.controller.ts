@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, MoreThan, Repository } from "typeorm";
-import { CreateEventDto } from './create-event.dto';
+import { CreateEventDto } from './input/create-event.dto';
 import { Event } from './event.entity';
-import { UpdateEventDto } from "./update-event.dto";
+import { UpdateEventDto } from "./input/update-event.dto";
 
 @Controller('/events')
 export class EventsController {
