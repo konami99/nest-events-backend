@@ -1,20 +1,38 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Logger, NotFoundException, Param, ParseIntPipe, Patch, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, MoreThan, Repository } from "typeorm";
-import { CreateEventDto } from './input/create-event.dto';
+import { Attendee } from "./attendee.entity";
 import { Event } from './event.entity';
+import { EventService } from "./events.service";
+import { CreateEventDto } from './input/create-event.dto';
+import { ListEvents } from "./input/list.events";
 import { UpdateEventDto } from "./input/update-event.dto";
 
 @Controller('/events')
 export class EventsController {
+  private readonly logger = new Logger(EventsController.name);
+
   constructor(
     @InjectRepository(Event)
-    private readonly repository: Repository<Event>
+    private readonly repository: Repository<Event>,
+    @InjectRepository(Attendee)
+    private readonly attendeeRepository: Repository<Attendee>,
+    private readonly eventsService: EventsService
   ) { }
 
   @Get()
-  async findAll() {
-    return await this.repository.find();
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async findAll(@Query() filter: ListEvents) {
+    const events = await this.eventsService
+      .getEventsWithAttendeeCountFilteredPaginated(
+        filter,
+        {
+          total: true,
+          currentPage: filter.page,
+          limit: 2
+        }
+      );
+    return events;
   }
 
   @Get('/practice')
@@ -35,9 +53,15 @@ export class EventsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     // console.log(typeof id);
-    return await this.repository.findOne(id);
+    const event = await this.eventsService.getEvent(id);
+
+    if (!event) {
+      throw new NotFoundException();
+    }
+
+    return event;
   }
 
   // You can also use the @UsePipes decorator to enable pipes.
@@ -70,7 +94,10 @@ export class EventsController {
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id') id) {
-    const event = await this.repository.findOne(id);
-    await this.repository.remove(event);
+    const result = await this.eventsService.deleteEvent(id);
+
+    if (result?.affected !== 1) {
+      throw new NotFoundException();
+    }
   }
 }
