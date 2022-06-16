@@ -17,7 +17,7 @@ export class EventsController {
     private readonly repository: Repository<Event>,
     @InjectRepository(Attendee)
     private readonly attendeeRepository: Repository<Attendee>,
-    private readonly eventsService: EventsService
+    private readonly eventsService: EventService
   ) { }
 
   @Get()
