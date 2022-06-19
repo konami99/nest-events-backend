@@ -8,8 +8,8 @@ import { Event } from "./event.entity";
 import { ListEvents, WhenEventFilter } from './input/list.events';
 
 @Injectable()
-export class EventService {
-  private readonly logger = new Logger(EventService.name);
+export class EventsService {
+  private readonly logger = new Logger(EventsService.name);
 
   constructor(
     @InjectRepository(Event)

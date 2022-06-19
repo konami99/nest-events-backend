@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Like, MoreThan, Repository } from "typeorm";
 import { Attendee } from "./attendee.entity";
 import { Event } from './event.entity';
-import { EventService } from "./events.service";
+import { EventsService } from "./events.service";
 import { CreateEventDto } from './input/create-event.dto';
 import { ListEvents } from "./input/list.events";
 import { UpdateEventDto } from "./input/update-event.dto";
@@ -17,7 +17,7 @@ export class EventsController {
     private readonly repository: Repository<Event>,
     @InjectRepository(Attendee)
     private readonly attendeeRepository: Repository<Attendee>,
-    private readonly eventsService: EventService
+    private readonly eventsService: EventsService
   ) { }
 
   @Get()

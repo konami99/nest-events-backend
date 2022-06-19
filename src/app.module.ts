@@ -9,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import ormConfig from './config/orm.config';
 import ormConfigProd from './config/orm.config.prod';
 import { EventsModule } from './events/events.module';
-import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
