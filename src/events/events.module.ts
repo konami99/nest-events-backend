@@ -9,7 +9,10 @@ import { EventsService } from './events.service';
   imports: [
     TypeOrmModule.forFeature([Event, Attendee]),
   ],
-  controllers: [EventsController],
+  controllers: [
+    EventsController,
+    
+  ],
   providers: [EventsService]
 })
 export class EventsModule {}

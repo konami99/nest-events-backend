@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, Logger, NotFoundException, Param, ParseIntPipe, Patch, Post, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, ForbiddenException, Get, HttpCode, Logger, NotFoundException, Param, ParseIntPipe, Patch, Post, Query, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AuthGuardJwt } from "src/auth/auth-guard.jwt";
 import { CurrentUser } from "src/auth/current-user.decorator";
@@ -35,6 +35,7 @@ export class EventsController {
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     // console.log(typeof id);
     const event = await this.eventsService.getEvent(id);
@@ -51,6 +52,7 @@ export class EventsController {
   // add it at the controller level.
   @Post()
   @UseGuards(AuthGuardJwt)
+  @UseInterceptors(ClassSerializerInterceptor)
   async create(
     @Body() input: CreateEventDto,
     @CurrentUser() user: User
@@ -62,6 +64,7 @@ export class EventsController {
   // new ValidationPipe({ groups: ['update'] })
   @Patch(':id')
   @UseGuards(AuthGuardJwt)
+  @UseInterceptors(ClassSerializerInterceptor)
   async update(
     @Param('id') id,
     @Body() input: UpdateEventDto,
