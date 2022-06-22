@@ -30,4 +30,16 @@ export class AttendeesService {
       }
     });
   }
+
+  public async createOrUpdate(
+    input: CreateAttendeeDto, eventId: number, userId: number
+  ): Promise<Attendee> {
+    const attendee = await this.findOneByEventIdAndUserId(eventId, userId) ?? new Attendee();
+
+    attendee.eventId = eventId;
+    attendee.userId = userId;
+    attendee.answer = input.answer;
+
+    return await this.attendeeRepository.save(attendee);
+  }
 }
