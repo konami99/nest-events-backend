@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
-import { Attendee } from "src/events/attendee.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Attendee } from "./../events/attendee.entity";
 import { Event } from './../events/event.entity';
 import { Profile } from "./profile.entity";
 
@@ -10,15 +10,14 @@ export class User {
   @Expose()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   @Expose()
   username: string;
 
   @Column()
-  @Expose()
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   @Expose()
   email: string;
 
